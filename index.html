@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <script>
+      const params = new URLSearchParams(window.location.hash.substring(1));
+      const idToken = params.get("id_token");
+
+      if (idToken) {
+        // ✅ Send with type + idToken
+        browser.runtime
+          .sendMessage({ type: "OAUTH_SUCCESS", idToken })
+          .then(() => window.close())
+          .catch((err) => {
+            console.error("Message send failed:", err);
+          });
+      } else {
+        browser.runtime
+          .sendMessage({ type: "OAUTH_ERROR", data: window.location.href })
+          .then(() => window.close());
+      }
+    </script>
+  </body>
+</html>
